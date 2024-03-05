@@ -17,18 +17,20 @@ export const login = async (req: express.Request, res: express.Response) => {
       return res.sendStatus(400);
     }
 
-    const expectedHash = authentication(user.authentication.salt, password);
+    const salt = user.authentication?.salt || ''; // Add null check and provide default value
+
+    const expectedHash = authentication(salt, password); // Use the updated salt value
     
-    if (user.authentication.password != expectedHash) {
+    if (user.authentication?.password != expectedHash) { // Add null check
       return res.sendStatus(403);
     }
 
-    const salt = random();
-    user.authentication.sessionToken = authentication(salt, user._id.toString());
+    const newSalt = random();
+    user.authentication.sessionToken = authentication(newSalt, user._id.toString());
 
     await user.save();
 
-    res.cookie('ANTONIO-AUTH', user.authentication.sessionToken, { domain: 'localhost', path: '/' });
+    res.cookie('Tharindu-AUTH', user.authentication.sessionToken, { domain: 'localhost', path: '/' });
 
     return res.status(200).json(user).end();
   } catch (error) {
