@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const userSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema({
     username: { type: String, required: true },
     email: { type: String, required: true },
     authentication: { 
@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
     }
 })
 
-export const UserModel = mongoose.model('user', userSchema);
+export const UserModel = mongoose.model('User', UserSchema);
 
 export const getUsers = () => UserModel.find();
 export const getUserByEmail = (email: string) => UserModel.findOne({email});
